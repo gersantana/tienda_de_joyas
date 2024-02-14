@@ -1,6 +1,7 @@
 const express = require('express');
 const { getProducts, getProductsOrder, getProductsPager} = require('../querys/index');
 const router = express.Router();
+const reportRoute = require("../middlewares/index")
 
 //funcion para preparar el HATEOAS (falta adaptar variables y descomentar)
 // const prepararHATEOAS = (medicamentos) => {
@@ -32,7 +33,7 @@ const router = express.Router();
 // });
 
 
-router.get('/products', async (req, res) => {
+router.get('/products',reportRoute, async (req, res) => {
     try {
         //linea adicional con limites:
         const queryString = req.query
@@ -46,7 +47,7 @@ router.get('/products', async (req, res) => {
 
 });
 
-router.get('/products/order', async (req, res) => {
+router.get('/products/order',reportRoute, async (req, res) => {
     try {
         const queryString = req.query
         const result = await getProductsOrder(queryString);
@@ -57,7 +58,7 @@ router.get('/products/order', async (req, res) => {
 
 });
 
-router.get('/products/pager', async (req, res) => {
+router.get('/products/pager',reportRoute, async (req, res) => {
     try {
         const queryString = req.query
         const result = await getProductsPager(queryString);
@@ -69,5 +70,10 @@ router.get('/products/pager', async (req, res) => {
 }
 );
 
+//mensaje si no hay coincidencias con las rutas anteriores
+router.get("*", (req, res) => {
+    res.status(404).send("La ruta solicitada no existe")
+    })
+    
 
 module.exports = router;

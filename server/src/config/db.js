@@ -10,15 +10,14 @@ const pool = new Pool({
     port: process.env.DB_PORT,
     allowExitOnIdle: true,
     });
-
-
+    
 // Test the connection    
-// const getData = async () => {
-//     const result = await pool.query('SELECT NOW()')
-//     console.log(result.rows)
-//     return result
-// }
+const getData = async () => {
+    const result = await pool.query('SELECT NOW()')
+    console.log(result.rows)
+    return result
+}
 
-// getData();
+getData();
 
 module.exports = pool;
