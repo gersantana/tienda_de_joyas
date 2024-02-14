@@ -1,5 +1,5 @@
 const express = require('express');
-const { getProducts, getProductsOrder, getProductsPager} = require('../querys/index');
+const {getJoyas, filtrarJoyas} = require('../querys/index');
 const router = express.Router();
 
 //funcion para preparar el HATEOAS (falta adaptar variables y descomentar)
@@ -32,35 +32,37 @@ const router = express.Router();
 // });
 
 
-router.get('/products', async (req, res) => {
+// router.get('/products', async (req, res) => {
+//     try {
+//         //linea adicional con limites:
+//         const queryString = req.query
+//         //y se le pasa el queryString a la funcion getProducts
+//         //luego se puede probar con http://localhost:3000/products?limit=5 por ej.
+//         const result = await getProducts(queryString);
+//         res.json(result);
+//     } catch (error) {
+//         res.status(500).json({error: error.message});
+//     }
+
+// });
+
+// router.get('/products/order', async (req, res) => {
+//     try {
+//         const queryString = req.query
+//         const result = await getProductsOrder(queryString);
+//         res.json(result);
+//     } catch (error) {
+//         res.status(500).json({error: error.message});
+//     }
+
+// });
+
+
+//ruta para obtener joyas
+router.get('/joyas', async (req, res) => {
     try {
-        //linea adicional con limites:
         const queryString = req.query
-        //y se le pasa el queryString a la funcion getProducts
-        //luego se puede probar con http://localhost:3000/products?limit=5 por ej.
-        const result = await getProducts(queryString);
-        res.json(result);
-    } catch (error) {
-        res.status(500).json({error: error.message});
-    }
-
-});
-
-router.get('/products/order', async (req, res) => {
-    try {
-        const queryString = req.query
-        const result = await getProductsOrder(queryString);
-        res.json(result);
-    } catch (error) {
-        res.status(500).json({error: error.message});
-    }
-
-});
-
-router.get('/products/pager', async (req, res) => {
-    try {
-        const queryString = req.query
-        const result = await getProductsPager(queryString);
+        const result = await getJoyas(queryString);
         res.json(result);
     } catch (error) {
         res.status(500).json({error: error.message});
@@ -68,6 +70,14 @@ router.get('/products/pager', async (req, res) => {
 
 }
 );
+
+
+//filtros
+router.get('/joyas/filtros', async (req, res) => {
+    const { precio_max, precio_min, categoria, metal } = req.query;
+    const result = await filtrarJoyas(precio_max, precio_min, categoria, metal);
+    res.json(result);
+});
 
 
 module.exports = router;
