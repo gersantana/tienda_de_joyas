@@ -1,5 +1,5 @@
 const express = require('express');
-const { getProducts, getProductsOrder, getProductsPager} = require('../querys/index');
+const {getJoyas, filtrarJoyas} = require('../querys/index');
 const router = express.Router();
 const reportRoute = require("../middlewares/index")
 
@@ -44,7 +44,6 @@ router.get('/products',reportRoute, async (req, res) => {
     } catch (error) {
         res.status(500).json({error: error.message});
     }
-
 });
 
 router.get('/products/order',reportRoute, async (req, res) => {
@@ -69,6 +68,28 @@ router.get('/products/pager',reportRoute, async (req, res) => {
 
 }
 );
+
+
+//ruta para obtener joyas
+router.get('/joyas',reportRoute, async (req, res) => {
+    try {
+        const queryString = req.query
+        const result = await getJoyas(queryString);
+        res.json(result);
+    } catch (error) {
+        res.status(500).json({error: error.message});
+    }
+
+}
+);
+
+
+//filtros
+router.get('/joyas/filtros', async (req, res) => {
+    const { precio_max, precio_min, categoria, metal } = req.query;
+    const result = await filtrarJoyas(precio_max, precio_min, categoria, metal);
+    res.json(result);
+});
 
 //mensaje si no hay coincidencias con las rutas anteriores
 router.get("*", (req, res) => {
