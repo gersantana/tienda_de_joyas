@@ -3,8 +3,19 @@ const pool = require('../config/db');
 const format = require('pg-format');
 
 
+const getJoyaByIdQuery = async (id) => {
+    try {
+        const consulta = 'SELECT * FROM inventario WHERE id = $1';
+        const { rows } = await pool.query(consulta, [id]);
+        return rows[0]; // Devuelve la primera fila, ya que debería ser única por id
+    } catch (error) {
+        console.error('Error en la consulta getJoyaByIdQuery:', error);
+        throw error;
+    }
+}
+
 //paginacion
-const getJoyasQuery = async ({ limits = 3, page = 1, order_by = "stock_ASC" }) => {
+const getJoyasQuery = async ({ limits = 10, page = 1, order_by = "stock_ASC" }) => {
 
     const [campo, direccion] = order_by.split('_');
     //calcular el offset o paginas a mostrar
@@ -55,6 +66,7 @@ const filtrarJoyasQuery = async (precio_max, precio_min, categoria, metal) => {
 
 
 module.exports = {
+    getJoyaByIdQuery,
     getJoyasQuery,
     filtrarJoyasQuery
 };

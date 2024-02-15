@@ -1,4 +1,4 @@
-const { getJoyasQuery, filtrarJoyasQuery } = require("../querys/index")
+const { getJoyasQuery, filtrarJoyasQuery, getJoyaByIdQuery} = require("../querys/index")
 
 
 // HATEOAS
@@ -15,6 +15,23 @@ const prepararHATEOAS = (joyas) => {
         results,
     };
     return HATEOAS;
+};
+
+
+const getJoyaByIdController = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const joya = await getJoyaByIdQuery(id);
+
+        if (!joya) {
+            return res.status(404).json({ msg: 'Joya no encontrada' });
+        }
+
+        res.json(joya);
+    } catch (error) {
+        res.status(500).json({ msg: 'Error al obtener detalles de la joya', error: error.message });
+    }
 };
 
 
@@ -80,6 +97,7 @@ const filtrarJoyasController = async (req,res) => {
 
 
 module.exports = {
+    getJoyaByIdController,
     getJoyasController,
     filtrarJoyasController
 }

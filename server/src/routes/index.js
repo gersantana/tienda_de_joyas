@@ -1,10 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const reportRoute = require("../middlewares/index")
-const { getJoyasController, filtrarJoyasController } = require("../controllers/index")
+const { getJoyasController, filtrarJoyasController, getJoyaByIdController } = require("../controllers/index")
 
 //ruta para obtener joyas
 router.get('/joyas', reportRoute, getJoyasController);
+
+router.get('/joyas/:id',reportRoute, getJoyaByIdController);
 
 //filtros
 router.get('/joyas/filtros', reportRoute, filtrarJoyasController)
